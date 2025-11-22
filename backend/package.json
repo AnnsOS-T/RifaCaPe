@@ -7,7 +7,8 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "seed": "ts-node src/scripts/seedBoletas.ts"
+    "seed": "ts-node src/scripts/seedBoletas.ts",
+    "render-build": "npm install && npm run build"
   },
   "keywords": [],
   "author": "",
