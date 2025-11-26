@@ -85,9 +85,6 @@ export const HomePage = () => {
             <div className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-1">
               $1.000.000
             </div>
-            <p className="text-gray-300 text-xs sm:text-sm font-medium">
-              $20.000 cada número
-            </p>
           </div>
 
           {/* Error */}
