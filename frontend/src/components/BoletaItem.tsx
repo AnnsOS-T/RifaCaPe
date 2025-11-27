@@ -11,9 +11,9 @@ export const BoletaItem = ({ boleta, onSelect }: BoletaItemProps) => {
       case BoletaEstado.DISPONIBLE:
         return 'bg-white hover:bg-gray-50 border-2 border-gray-300 cursor-pointer text-gray-800 shadow-sm hover:shadow-md hover:border-teal-500';
       case BoletaEstado.RESERVADA:
-        return 'bg-gray-200 border-2 border-gray-300 cursor-not-allowed text-gray-500 opacity-60';
+        return 'bg-gradient-to-br from-yellow-400 to-yellow-500 border-2 border-yellow-600 cursor-not-allowed text-gray-800 shadow-md font-semibold';
       case BoletaEstado.PAGADA:
-        return 'bg-gradient-to-br from-red-500 to-red-600 border-2 border-red-700 cursor-not-allowed text-white shadow-md relative';
+        return 'bg-gradient-to-br from-green-500 to-green-600 border-2 border-green-700 cursor-not-allowed text-white shadow-md relative';
       default:
         return 'bg-slate-300';
     }
