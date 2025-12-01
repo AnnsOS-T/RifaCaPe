@@ -1,6 +1,6 @@
     import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, AlertCircle, CheckCircle, Clock, Calendar, User, ArrowLeft, Trophy, Sparkles } from 'lucide-react';
+import { Loader2, AlertCircle, CheckCircle, Clock, Calendar, User, Trophy, Sparkles } from 'lucide-react';
 import axios from 'axios';
 
 interface BoletaResultado {
