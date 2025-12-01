@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Loader2, Info, X } from 'lucide-react';
+import { Loader2, Info, X, Sparkles, Trophy, Calendar } from 'lucide-react';
 import { Boleta } from '../types';
 import { boletaService } from '../services/api';
 import { BoletaItem } from '../components/BoletaItem';
@@ -14,7 +14,6 @@ export const HomePage = () => {
 
   useEffect(() => {
     cargarDatos();
-    // Actualizar cada 30 segundos
     const interval = setInterval(cargarDatos, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -44,16 +43,12 @@ export const HomePage = () => {
     if (!boletaSeleccionada) return;
 
     try {
-      // Reservar la boleta con los datos del usuario y comprobante opcional
       await boletaService.reservarBoleta(
         boletaSeleccionada, 
         { nombre, telefono },
         comprobante
       );
-
-      // Recargar las boletas para actualizar el estado
       await cargarDatos();
-      
       return { success: true };
     } catch (err: any) {
       console.error('Error:', err);
@@ -63,7 +58,7 @@ export const HomePage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-pink-500 to-red-500">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-white animate-spin mx-auto mb-4" />
           <p className="text-white font-medium">Cargando boletas...</p>
@@ -73,107 +68,141 @@ export const HomePage = () => {
   }
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center py-4 sm:py-8 px-2 sm:px-4">
-      <div className="max-w-md w-full relative z-10">
-        {/* Card principal con fondo oscuro */}
-        <div className="bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-gray-700/50">
-          {/* Botón de información en la esquina superior izquierda */}
+    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 relative overflow-hidden">
+      {/* Elementos decorativos de fondo */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-400/5 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="relative z-10 container mx-auto px-4 py-8 sm:py-12">
+        <div className="max-w-4xl mx-auto">
+          {/* Header con título y premio */}
+          <div className="text-center mb-8 sm:mb-12">
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full mb-4">
+              <Sparkles className="w-4 h-4 text-yellow-300" />
+              <span className="text-white text-sm font-semibold">Participa y Gana</span>
+            </div>
+            
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-white mb-4 drop-shadow-2xl">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 via-yellow-300 to-yellow-400">
+                SUPER RIFA
+              </span>
+            </h1>
+            
+            <div className="bg-white rounded-3xl px-8 py-6 inline-block shadow-2xl transform hover:scale-105 transition-transform">
+              <div className="flex items-center gap-3 mb-2">
+                <Trophy className="w-8 h-8 text-yellow-500" />
+                <span className="text-gray-600 text-lg font-semibold">Premio Mayor</span>
+              </div>
+              <div className="text-5xl sm:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
+                $1.000.000
+              </div>
+            </div>
+          </div>
+
+          {/* Botón de información flotante */}
           <button
             onClick={() => setMostrarInfo(!mostrarInfo)}
-            className="absolute top-2 left-2 sm:top-3 sm:left-3 z-20 bg-transparent hover:bg-white/10 text-white rounded-full px-3 py-2 transition-all duration-200 hover:scale-105 flex items-center gap-1.5"
+            className="fixed top-4 right-4 bg-white text-purple-600 rounded-full px-4 py-3 shadow-xl hover:shadow-2xl transition-all hover:scale-110 flex items-center gap-2 z-50"
             aria-label="Información de compra"
           >
-            <Info className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="text-xs sm:text-sm font-medium">Info</span>
+            <Info className="w-5 h-5" />
+            <span className="text-sm font-bold">¿Cómo participar?</span>
           </button>
 
           {/* Modal de instrucciones */}
           {mostrarInfo && (
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm z-30 rounded-2xl sm:rounded-3xl flex items-center justify-center p-4">
-              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl max-w-sm w-full p-4 sm:p-6 relative border border-gray-700">
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl">
                 <button
                   onClick={() => setMostrarInfo(false)}
-                  className="absolute top-2 right-2 text-gray-400 hover:text-white transition-colors"
+                  className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
                   aria-label="Cerrar"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-6 h-6" />
                 </button>
                 
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                  <Info className="w-6 h-6 text-blue-500" />
-                  ¿Cómo comprar?
+                <h3 className="text-3xl font-black text-gray-800 mb-6 flex items-center gap-3">
+                  <Sparkles className="w-8 h-8 text-purple-600" />
+                  Instrucciones
                 </h3>
                 
-                <div className="space-y-3 text-gray-200 text-sm">
-                  <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
+                <div className="space-y-4 text-gray-700">
+                  <div className="flex gap-4 items-start">
+                    <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
                       1
                     </div>
-                    <p><strong>Elige tu número:</strong> Selecciona una boleta disponible (en blanco) del tablero.</p>
+                    <div>
+                      <p className="font-bold text-gray-800 mb-1">Selecciona tu número</p>
+                      <p className="text-sm">Escoge una boleta disponible del tablero</p>
+                    </div>
                   </div>
                   
-                  <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
+                  <div className="flex gap-4 items-start">
+                    <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
                       2
                     </div>
-                    <p><strong>Completa tus datos:</strong> Ingresa tu nombre y teléfono en el formulario.</p>
+                    <div>
+                      <p className="font-bold text-gray-800 mb-1">Completa el formulario</p>
+                      <p className="text-sm">Ingresa tu nombre y teléfono</p>
+                    </div>
                   </div>
                   
-                  <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
+                  <div className="flex gap-4 items-start">
+                    <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
                       3
                     </div>
-                    <p><strong>Realiza el pago:</strong> Transfiere al número <span className="font-bold text-white">3105572015</span> (Dilan Acuña).</p>
+                    <div>
+                      <p className="font-bold text-gray-800 mb-1">Realiza el pago</p>
+                      <p className="text-sm">Transfiere a <span className="font-bold">3105572015</span> (Dilan Acuña)</p>
+                    </div>
                   </div>
                   
-                  <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
+                  <div className="flex gap-4 items-start">
+                    <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
                       4
                     </div>
-                    <p><strong>Adjunta comprobante:</strong> Si subes el comprobante, tu boleta se marca como <span className="text-green-400 font-semibold">comprada</span>. Si no lo adjuntas, quedará <span className="text-yellow-400 font-semibold">reservada</span> temporalmente.</p>
-                  </div>
-                  
-                  <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                      5
+                    <div>
+                      <p className="font-bold text-gray-800 mb-1">Sube el comprobante</p>
+                      <p className="text-sm">
+                        Con comprobante: <span className="text-green-600 font-semibold">Comprada</span> | 
+                        Sin comprobante: <span className="text-yellow-600 font-semibold">Reservada</span>
+                      </p>
                     </div>
-                    <p><strong>¡Listo!</strong> Tu boleta será confirmada y aparecerá marcada. ¡Mucha suerte!</p>
                   </div>
                 </div>
                 
-                <div className="mt-4 pt-4 border-t border-gray-700">
-                  <p className="text-xs text-gray-400 text-center">
-                    El sorteo es el <strong className="text-white">20 de Diciembre 2025</strong> con la Lotería de Boyacá
+                <div className="mt-6 pt-6 border-t border-gray-200 flex items-center justify-center gap-2 text-gray-600">
+                  <Calendar className="w-4 h-4" />
+                  <p className="text-sm">
+                    Sorteo: <strong className="text-purple-600">20 Diciembre 2025</strong>
                   </p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Header con título y premio */}
-          <div className="text-center pt-4 sm:pt-8 pb-4 sm:pb-6 px-4 sm:px-6 relative">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-2 sm:mb-3">
-              <span className="text-gray-300">GRAN</span>
-              <span className="text-white italic">rifa</span>
-            </h1>
-            <div className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-1">
-              $1.000.000
-            </div>
-          </div>
-
           {/* Error */}
           {error && (
-            <div className="mx-3 sm:mx-6 mb-3 sm:mb-4">
-              <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-3 py-2 rounded-lg text-xs">
+            <div className="mb-6">
+              <div className="bg-red-500 text-white px-4 py-3 rounded-2xl shadow-lg">
                 {error}
               </div>
             </div>
           )}
 
-          {/* Grid de Boletas */}
-          <div className="px-3 sm:px-6 pb-4 sm:pb-6">
-            <div className="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-4 shadow-inner">
-              <div className="grid grid-cols-10 gap-0.5 sm:gap-1">
+          {/* Card principal con las boletas */}
+          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-6 sm:p-8">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Selecciona tu número</h2>
+              <p className="text-gray-600">Cada boleta cuesta <span className="font-bold text-purple-600">$20.000</span></p>
+            </div>
+
+            {/* Grid de Boletas */}
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6">
+              <div className="grid grid-cols-10 gap-1 sm:gap-2">
                 {boletas.map((boleta) => (
                   <BoletaItem
                     key={boleta._id}
@@ -183,21 +212,43 @@ export const HomePage = () => {
                 ))}
               </div>
             </div>
+
+            {/* Leyenda */}
+            <div className="mt-6 flex flex-wrap gap-4 justify-center text-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-white border-2 border-gray-300 rounded"></div>
+                <span className="text-gray-600">Disponible</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded"></div>
+                <span className="text-gray-600">Reservada</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-gradient-to-br from-green-500 to-green-600 rounded"></div>
+                <span className="text-gray-600">Pagada</span>
+              </div>
+            </div>
           </div>
 
-          {/* Footer con información */}
-          <div className="bg-black/40 backdrop-blur-sm px-3 sm:px-6 py-3 sm:py-4 border-t border-gray-700/50">
-            <div className="flex justify-between items-center text-xs sm:text-xs mb-2 sm:mb-3">
-              <div className="text-left">
-                <p className="text-white font-bold text-xs sm:text-sm">Valor: $20.000</p>
-                <p className="text-gray-400 mb-0.5 text-[10px] sm:text-xs">Transferencias al:</p>
-                <p className="text-white font-bold text-xs sm:text-sm">3105572015</p>
-                <p className="text-gray-300 text-[9px] sm:text-[10px]">Responsable Dilan Acuña</p>
-              </div>
-              <div className="text-right">
-                <p className="text-gray-400 mb-0.5 text-[10px] sm:text-xs">Juega el:</p>
-                <p className="text-white font-black text-2xl sm:text-2xl leading-none">20 Diciembre 2025</p>
-                <p className="text-gray-300 text-xs sm:text-sm">Con la loteria de Boyacá (Sorteo 4603)</p>
+          {/* Footer */}
+          <div className="mt-8 text-center">
+            <div className="bg-white/20 backdrop-blur-md rounded-2xl px-6 py-4 inline-block">
+              <p className="text-white text-sm mb-2">Información del sorteo</p>
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 text-white">
+                <div>
+                  <p className="text-xs opacity-80">Fecha del sorteo</p>
+                  <p className="font-bold">20 de Diciembre 2025</p>
+                </div>
+                <div className="hidden sm:block w-px bg-white/30"></div>
+                <div>
+                  <p className="text-xs opacity-80">Lotería</p>
+                  <p className="font-bold">Boyacá (Sorteo 4603)</p>
+                </div>
+                <div className="hidden sm:block w-px bg-white/30"></div>
+                <div>
+                  <p className="text-xs opacity-80">Contacto</p>
+                  <p className="font-bold">3105572015</p>
+                </div>
               </div>
             </div>
           </div>

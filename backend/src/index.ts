@@ -44,7 +44,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 // Rutas
 app.get('/', (req: Request, res: Response) => {
   res.json({
-    message: 'API de Rifa - Sistema de Venta de Boletas',
+    message: 'RifasCaPe API - Sistema de Venta de Boletas',
     version: '1.0.0',
     endpoints: {
       boletas: '/api/boletas',

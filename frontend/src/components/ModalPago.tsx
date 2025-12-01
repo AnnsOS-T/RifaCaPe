@@ -74,45 +74,50 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4 animate-fade-in">
-      <div className="bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-xl sm:rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-700/50 animate-scale-in max-h-[95vh] overflow-y-auto">
-        {/* Header con gradiente igual al home */}
-        <div className="bg-gradient-to-r from-teal-600 to-cyan-600 px-4 sm:px-6 py-4 sm:py-5 text-white sticky top-0 z-10">
-          <div className="flex justify-between items-start">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-in">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden animate-scale-in max-h-[95vh] overflow-y-auto">
+        {/* Header con gradiente vibrante */}
+        <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 px-6 py-6 text-white relative overflow-hidden">
+          {/* Elementos decorativos */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-300/10 rounded-full blur-xl"></div>
+          
+          <div className="relative z-10 flex justify-between items-start">
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />
-                <h2 className="text-lg sm:text-xl font-bold">
-                  Comprar Boleta #{boletaNumero}
+              <div className="flex items-center gap-2 mb-2">
+                <CreditCard className="w-6 h-6" />
+                <h2 className="text-2xl font-black">
+                  Boleta #{boletaNumero}
                 </h2>
               </div>
+              <p className="text-white/90 text-sm">Completa tu compra</p>
             </div>
             <button
               onClick={onClose}
-              className="text-white/90 hover:text-white hover:bg-white/10 rounded-lg p-1 transition-colors"
+              className="text-white/90 hover:text-white hover:bg-white/20 rounded-full p-2 transition-all hover:rotate-90 duration-300"
               disabled={loading}
             >
-              <X className="w-4 h-4 sm:w-5 sm:h-5" />
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
 
-        <div className="p-4 sm:p-6 bg-gradient-to-br from-gray-800 via-gray-900 to-black">
+        <div className="p-6 sm:p-8 bg-gradient-to-br from-gray-50 to-white">
           {/* Info de precio */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 sm:p-4 mb-4 sm:mb-5 border border-white/20">
+          <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-4 sm:p-5 mb-6 border-2 border-purple-200">
             <div className="flex items-center justify-between">
-              <span className="text-gray-300 font-bold text-lg sm:text-2xl">Precio total</span>
-              <span className="text-lg sm:text-2xl font-bold text-white">$20.000</span>
+              <span className="text-gray-700 font-bold text-base sm:text-lg">Precio total</span>
+              <span className="text-2xl sm:text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">$20.000</span>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             {/* Campo Nombre */}
             <div>
-              <label htmlFor="nombre" className="block text-gray-300 font-medium text-xs sm:text-sm mb-2">
+              <label htmlFor="nombre" className="block text-gray-700 font-semibold text-sm mb-2">
                 <div className="flex items-center gap-2">
-                  <User className="w-3 h-3 sm:w-4 sm:h-4" />
-                  Nombre completo <span className="text-red-400">*</span>
+                  <User className="w-4 h-4 text-purple-600" />
+                  Nombre completo <span className="text-red-500">*</span>
                 </div>
               </label>
               <input
@@ -120,7 +125,7 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
                 id="nombre"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
-                className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-white/10 border border-white/20 rounded-lg text-white text-sm sm:text-base placeholder-gray-400 focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all outline-none"
+                className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-800 text-sm sm:text-base placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
                 placeholder="Tu nombre completo"
                 required
                 disabled={loading}
@@ -129,10 +134,10 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
 
             {/* Campo Teléfono */}
             <div>
-              <label htmlFor="telefono" className="block text-gray-300 font-medium text-xs sm:text-sm mb-2">
+              <label htmlFor="telefono" className="block text-gray-700 font-semibold text-sm mb-2">
                 <div className="flex items-center gap-2">
-                  <Phone className="w-3 h-3 sm:w-4 sm:h-4" />
-                  Número de teléfono <span className="text-red-400">*</span>
+                  <Phone className="w-4 h-4 text-purple-600" />
+                  Número de teléfono <span className="text-red-500">*</span>
                 </div>
               </label>
               <input
@@ -140,7 +145,7 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
                 id="telefono"
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
-                className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-white/10 border border-white/20 rounded-lg text-white text-sm sm:text-base placeholder-gray-400 focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all outline-none"
+                className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-800 text-sm sm:text-base placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
                 placeholder="3001234567"
                 required
                 disabled={loading}
@@ -149,10 +154,10 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
 
             {/* Campo Comprobante (opcional) */}
             <div>
-              <label htmlFor="comprobante" className="block text-gray-300 font-medium text-xs sm:text-sm mb-2">
+              <label htmlFor="comprobante" className="block text-gray-700 font-semibold text-sm mb-2">
                 <div className="flex items-center gap-2">
-                  <ImageIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-                  Comprobante <span className="text-gray-500 text-xs">(opcional)</span>
+                  <ImageIcon className="w-4 h-4 text-purple-600" />
+                  Comprobante de pago <span className="text-gray-500 text-xs font-normal">(opcional)</span>
                 </div>
               </label>
               <div className="relative">
@@ -167,24 +172,24 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
                 <label
                   htmlFor="comprobante"
                   className={`
-                    w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/10 border-2 border-dashed border-white/30 rounded-lg
-                    flex items-center justify-center gap-2 cursor-pointer
-                    hover:bg-white/20 hover:border-teal-500 transition-all
+                    w-full px-4 py-4 bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-dashed border-purple-300 rounded-xl
+                    flex items-center justify-center gap-3 cursor-pointer
+                    hover:from-purple-100 hover:to-pink-100 hover:border-purple-500 transition-all
                     ${loading ? 'opacity-50 cursor-not-allowed' : ''}
                   `}
                 >
                   {comprobante ? (
                     <>
-                      <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5 text-teal-400" />
-                      <span className="text-xs sm:text-sm text-gray-300 truncate max-w-[150px] sm:max-w-[200px]">
+                      <ImageIcon className="w-5 h-5 text-purple-600" />
+                      <span className="text-sm text-gray-700 font-medium truncate max-w-[200px]">
                         {comprobante.name}
                       </span>
                     </>
                   ) : (
                     <>
-                      <Upload className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
-                      <span className="text-xs sm:text-sm text-gray-400">
-                        Adjuntar captura
+                      <Upload className="w-5 h-5 text-purple-500" />
+                      <span className="text-sm text-gray-600">
+                        Click para adjuntar captura del pago
                       </span>
                     </>
                   )}
@@ -194,7 +199,7 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
                 <button
                   type="button"
                   onClick={() => setComprobante(null)}
-                  className="text-xs text-red-400 hover:text-red-300 mt-1 transition-colors"
+                  className="text-xs text-red-500 hover:text-red-600 mt-2 font-medium transition-colors"
                   disabled={loading}
                 >
                   Eliminar archivo
@@ -202,31 +207,37 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
               )}
             </div>
 
+            {/* Info adicional */}
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl">
+              <p className="text-xs text-blue-800">
+                <strong>Importante:</strong> Si adjuntas el comprobante, tu boleta se marcará como <strong className="text-green-600">comprada</strong>. Sin comprobante quedará <strong className="text-yellow-600">reservada</strong> temporalmente.
+              </p>
+            </div>
+
             {/* Botones */}
-            <div className="flex gap-2 sm:gap-3 pt-2">
+            <div className="flex gap-3 pt-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm sm:text-base font-medium transition-colors border border-white/20"
+                className="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl text-sm sm:text-base font-semibold transition-all"
                 disabled={loading}
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white rounded-lg text-sm sm:text-base font-medium transition-all flex items-center justify-center gap-2 shadow-lg"
+                className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 hover:from-purple-700 hover:via-pink-600 hover:to-red-600 text-white rounded-xl text-sm sm:text-base font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105"
                 disabled={loading}
               >
                 {loading ? (
                   <>
-                    <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 animate-spin" />
-                    <span className="hidden sm:inline">Reservando...</span>
-                    <span className="sm:hidden">...</span>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Procesando...</span>
                   </>
                 ) : (
                   <>
-                    <CreditCard className="w-3 h-3 sm:w-4 sm:h-4" />
-                    Comprar
+                    <CreditCard className="w-4 h-4" />
+                    Confirmar Compra
                   </>
                 )}
               </button>

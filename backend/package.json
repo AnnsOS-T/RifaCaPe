@@ -1,7 +1,7 @@
 {
-  "name": "rifa-backend",
+  "name": "rifascape-backend",
   "version": "1.0.0",
-  "description": "Backend para sistema de venta de boletas",
+  "description": "Backend para RifasCaPe - Sistema de venta de boletas",
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
