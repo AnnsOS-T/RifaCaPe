@@ -17,7 +17,7 @@ const app: Express = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-// Compresi\u00f3n gzip
+// Compresión gzip
 app.use(compression());
 
 const allowedOrigins: string[] = [
@@ -27,7 +27,17 @@ const allowedOrigins: string[] = [
 ].filter((origin): origin is string => Boolean(origin));
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    // Permitir requests sin origen (como mobile apps o curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Permitir cualquier URL de Vercel
+    if (origin.includes('.vercel.app') || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    callback(new Error('No permitido por CORS'));
+  },
   credentials: true
 }));
 
