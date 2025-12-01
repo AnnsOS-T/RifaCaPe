@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
+import compression from 'compression';
 import dotenv from 'dotenv';
 import path from 'path';
 import { connectDB } from './config/database';
@@ -16,6 +17,8 @@ const app: Express = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+// Compresi\u00f3n gzip
+app.use(compression());
 
 const allowedOrigins: string[] = [
   process.env.FRONTEND_URL,

@@ -41,8 +41,7 @@ const pagoSchema = new Schema<IPagoDocument>(
   }
 );
 
-// Índices
-pagoSchema.index({ transactionId: 1 });
+// Índices (transactionId ya tiene unique: true, no necesita index adicional)
 pagoSchema.index({ boletaNumero: 1 });
 pagoSchema.index({ estado: 1 });
 

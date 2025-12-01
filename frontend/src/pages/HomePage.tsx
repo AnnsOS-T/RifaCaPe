@@ -80,10 +80,11 @@ export const HomePage = () => {
           {/* Botón de información en la esquina superior izquierda */}
           <button
             onClick={() => setMostrarInfo(!mostrarInfo)}
-            className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 bg-transparent hover:bg-white/10 text-white rounded-full p-2 transition-all duration-200 hover:scale-110"
+            className="absolute top-2 left-2 sm:top-3 sm:left-3 z-20 bg-transparent hover:bg-white/10 text-white rounded-full px-3 py-2 transition-all duration-200 hover:scale-105 flex items-center gap-1.5"
             aria-label="Información de compra"
           >
             <Info className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="text-xs sm:text-sm font-medium">Info</span>
           </button>
 
           {/* Modal de instrucciones */}
@@ -134,7 +135,7 @@ export const HomePage = () => {
                   
                   <div className="flex gap-3">
                     <div className="flex-shrink-0 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                      ✓
+                      5
                     </div>
                     <p><strong>¡Listo!</strong> Tu boleta será confirmada y aparecerá marcada. ¡Mucha suerte!</p>
                   </div>

@@ -4,7 +4,12 @@ export const connectDB = async (): Promise<void> => {
   try {
     const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/rifa';
     
-    await mongoose.connect(mongoURI);
+    await mongoose.connect(mongoURI, {
+      maxPoolSize: 10,
+      minPoolSize: 2,
+      socketTimeoutMS: 45000,
+      serverSelectionTimeoutMS: 10000,
+    });
     
     console.log(' MongoDB conectado exitosamente');
   } catch (error) {

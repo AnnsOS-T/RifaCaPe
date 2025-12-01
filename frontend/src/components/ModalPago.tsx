@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { X, CreditCard, User, Phone, Loader2, Upload, ImageIcon } from 'lucide-react';
+import { Notification, NotificationType } from './Notification';
 
 interface ModalPagoProps {
   boletaNumero: number;
@@ -7,23 +8,42 @@ interface ModalPagoProps {
   onConfirmar: (nombre: string, telefono: string, comprobante?: File) => Promise<any>;
 }
 
+interface NotificationState {
+  show: boolean;
+  type: NotificationType;
+  message: string;
+}
+
 export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps) => {
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
   const [comprobante, setComprobante] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState<NotificationState>({
+    show: false,
+    type: 'success',
+    message: ''
+  });
+
+  const showNotification = (type: NotificationType, message: string) => {
+    setNotification({ show: true, type, message });
+  };
+
+  const hideNotification = () => {
+    setNotification({ ...notification, show: false });
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       // Validar que sea imagen
       if (!file.type.startsWith('image/')) {
-        alert('Por favor selecciona un archivo de imagen válido');
+        showNotification('error', 'Por favor selecciona un archivo de imagen válido');
         return;
       }
       // Validar tamaño (máx 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        alert('La imagen no debe superar los 5MB');
+        showNotification('error', 'La imagen no debe superar los 5MB');
         return;
       }
       setComprobante(file);
@@ -34,18 +54,20 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
     e.preventDefault();
     
     if (!nombre.trim() || !telefono.trim()) {
-      alert('Por favor completa todos los campos requeridos');
+      showNotification('warning', 'Por favor completa todos los campos requeridos');
       return;
     }
 
     setLoading(true);
     try {
       await onConfirmar(nombre, telefono, comprobante || undefined);
-      alert('¡Boleta reservada exitosamente! Recibirás confirmación cuando se verifique el pago.');
-      onClose();
+      showNotification('success', '¡Boleta reservada exitosamente! Recibirás confirmación cuando se verifique el pago.');
+      setTimeout(() => {
+        onClose();
+      }, 2000);
     } catch (error) {
       console.error('Error:', error);
-      alert('Error al procesar la reserva. Por favor intenta nuevamente.');
+      showNotification('error', 'Error al procesar la reserva. Por favor intenta nuevamente.');
     } finally {
       setLoading(false);
     }
@@ -212,6 +234,15 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
           </form>
         </div>
       </div>
+
+      {/* Notificación */}
+      {notification.show && (
+        <Notification
+          type={notification.type}
+          message={notification.message}
+          onClose={hideNotification}
+        />
+      )}
     </div>
   );
 };

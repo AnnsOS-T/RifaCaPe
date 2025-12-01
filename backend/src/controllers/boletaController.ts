@@ -2,12 +2,29 @@ import { Request, Response } from 'express';
 import { Boleta } from '../models/Boleta';
 import { Pago } from '../models/Pago';
 import { BoletaEstado, PagoEstado } from '../types';
+import { cacheService } from '../utils/cache';
 
 export class BoletaController {
   // Listar todas las boletas
   static async listarBoletas(req: Request, res: Response) {
     try {
-      const boletas = await Boleta.find().sort({ numero: 1 }).select('-__v');
+      // Intentar obtener del caché
+      const cached = cacheService.get('boletas');
+      if (cached) {
+        return res.json({
+          success: true,
+          data: cached
+        });
+      }
+
+      const boletas = await Boleta.find()
+        .sort({ numero: 1 })
+        .select('-__v')
+        .lean()
+        .exec();
+      
+      // Guardar en caché
+      cacheService.set('boletas', boletas);
       
       res.json({
         success: true,
@@ -75,6 +92,9 @@ export class BoletaController {
       }
       
       await boleta.save();
+
+      // Invalidar caché
+      cacheService.invalidate('boletas');
 
       res.json({
         success: true,

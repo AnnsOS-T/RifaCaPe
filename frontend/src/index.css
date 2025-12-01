@@ -88,6 +88,10 @@
     animation: slideUp 0.4s ease-out;
   }
 
+  .animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+  }
+
   /* Glassmorphism effect */
   .glass {
     @apply bg-white/80 backdrop-blur-md border border-white/20;
@@ -96,6 +100,17 @@
   /* Texto con gradiente */
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-400;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 
