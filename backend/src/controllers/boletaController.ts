@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Boleta } from '../models/Boleta';
 import { Pago } from '../models/Pago';
+import { Sorteo } from '../models/Sorteo';
 import { BoletaEstado, PagoEstado } from '../types';
 import { cacheService } from '../utils/cache';
 
@@ -53,16 +54,16 @@ export class BoletaController {
         });
       }
 
-      const boletaNum = parseInt(numero);
-      if (isNaN(boletaNum) || boletaNum < 1 || boletaNum > 100) {
+      // Validar formato de número (00-99)
+      if (!/^\d{2}$/.test(numero)) {
         return res.status(400).json({
           success: false,
-          message: 'Número de boleta inválido'
+          message: 'Número de boleta inválido (debe ser 00-99)'
         });
       }
 
       // Buscar la boleta
-      const boleta = await Boleta.findOne({ numero: boletaNum });
+      const boleta = await Boleta.findOne({ numero });
       
       if (!boleta) {
         return res.status(404).json({
@@ -120,7 +121,7 @@ export class BoletaController {
   static async obtenerBoleta(req: Request, res: Response) {
     try {
       const { numero } = req.params;
-      const boleta = await Boleta.findOne({ numero: parseInt(numero) });
+      const boleta = await Boleta.findOne({ numero });
 
       if (!boleta) {
         return res.status(404).json({
@@ -251,7 +252,7 @@ export class BoletaController {
         });
       }
 
-      const boleta = await Boleta.findOne({ numero: parseInt(numero) });
+      const boleta = await Boleta.findOne({ numero });
       
       if (!boleta) {
         return res.status(404).json({
@@ -290,7 +291,7 @@ export class BoletaController {
         });
       }
 
-      const boleta = await Boleta.findOne({ numero: parseInt(numero) });
+      const boleta = await Boleta.findOne({ numero });
       
       if (!boleta) {
         return res.status(404).json({
@@ -332,7 +333,7 @@ export class BoletaController {
         });
       }
 
-      const boleta = await Boleta.findOne({ numero: parseInt(numero) });
+      const boleta = await Boleta.findOne({ numero });
       
       if (!boleta) {
         return res.status(404).json({
@@ -354,6 +355,139 @@ export class BoletaController {
       res.status(500).json({
         success: false,
         message: 'Error al actualizar boleta'
+      });
+    }
+  }
+
+  // Obtener resultados del sorteo (solo boletas reservadas/pagadas)
+  static async obtenerResultados(req: Request, res: Response) {
+    try {
+      // Obtener estado del sorteo
+      let sorteo = await Sorteo.findOne();
+      
+      const boletas = await Boleta.find({ 
+        estado: { $ne: 'disponible' } 
+      })
+        .sort({ numero: 1 })
+        .select('numero estado usuario updatedAt')
+        .lean()
+        .exec();
+
+      const resultados = boletas.map(boleta => {
+        const nombre = boleta.usuario?.nombre || '';
+        const nombreCensurado = nombre.length >= 3 
+          ? nombre.substring(0, 3) + '*'.repeat(Math.max(nombre.length - 3, 3))
+          : nombre + '*'.repeat(3);
+
+        return {
+          numero: boleta.numero,
+          estado: boleta.estado,
+          nombreCensurado,
+          fechaCompra: boleta.updatedAt
+        };
+      });
+
+      res.json({
+        success: true,
+        data: {
+          resultados,
+          sorteoFinalizado: sorteo?.finalizado || false,
+          numeroGanador: sorteo?.numeroGanador,
+          fechaFinalizacion: sorteo?.fechaFinalizacion
+        }
+      });
+    } catch (error) {
+      console.error('Error al obtener resultados:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error al obtener resultados del sorteo'
+      });
+    }
+  }
+
+  // Verificar si el sorteo está finalizado
+  static async verificarSorteo(req: Request, res: Response) {
+    try {
+      let sorteo = await Sorteo.findOne();
+      
+      if (!sorteo) {
+        sorteo = await Sorteo.create({ finalizado: false });
+      }
+
+      res.json({
+        success: true,
+        data: {
+          finalizado: sorteo.finalizado,
+          numeroGanador: sorteo.numeroGanador,
+          fechaFinalizacion: sorteo.fechaFinalizacion
+        }
+      });
+    } catch (error) {
+      console.error('Error al verificar sorteo:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error al verificar estado del sorteo'
+      });
+    }
+  }
+
+  // Finalizar sorteo (solo admin)
+  static async finalizarSorteo(req: Request, res: Response) {
+    try {
+      const { secretKey } = req.params;
+      const { numeroGanador } = req.body;
+
+      // Verificar clave secreta
+      if (secretKey !== process.env.ADMIN_SECRET_KEY) {
+        return res.status(403).json({
+          success: false,
+          message: 'Acceso denegado'
+        });
+      }
+
+      // Validar número ganador (formato 00-99)
+      if (!/^\d{2}$/.test(numeroGanador)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Número ganador inválido (debe ser 00-99)'
+        });
+      }
+
+      // Verificar que no esté ya finalizado
+      let sorteo = await Sorteo.findOne();
+      if (sorteo?.finalizado) {
+        return res.status(400).json({
+          success: false,
+          message: 'El sorteo ya ha sido finalizado'
+        });
+      }
+
+      // Crear o actualizar sorteo
+      if (!sorteo) {
+        sorteo = new Sorteo();
+      }
+
+      sorteo.finalizado = true;
+      sorteo.numeroGanador = numeroGanador;
+      sorteo.fechaFinalizacion = new Date();
+      await sorteo.save();
+
+      // Invalidar caché
+      cacheService.invalidate('boletas');
+
+      res.json({
+        success: true,
+        message: 'Sorteo finalizado exitosamente',
+        data: {
+          numeroGanador: sorteo.numeroGanador,
+          fechaFinalizacion: sorteo.fechaFinalizacion
+        }
+      });
+    } catch (error) {
+      console.error('Error al finalizar sorteo:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error al finalizar sorteo'
       });
     }
   }

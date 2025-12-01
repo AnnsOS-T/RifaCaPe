@@ -3,7 +3,7 @@ import { X, CreditCard, User, Phone, Loader2, Upload, ImageIcon } from 'lucide-r
 import { Notification, NotificationType } from './Notification';
 
 interface ModalPagoProps {
-  boletaNumero: number;
+  boletaNumero: string;
   onClose: () => void;
   onConfirmar: (nombre: string, telefono: string, comprobante?: File) => Promise<any>;
 }
@@ -74,23 +74,23 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-in">
-      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden animate-scale-in max-h-[95vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-2 sm:p-4 animate-fade-in">
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-md w-full flex flex-col animate-scale-in max-h-[100vh] sm:max-h-[95vh] overflow-hidden">
         {/* Header con gradiente vibrante */}
-        <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 px-6 py-6 text-white relative overflow-hidden">
+        <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 px-4 sm:px-6 py-4 sm:py-6 text-white relative overflow-hidden flex-shrink-0">
           {/* Elementos decorativos */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-300/10 rounded-full blur-xl"></div>
           
           <div className="relative z-10 flex justify-between items-start">
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <CreditCard className="w-6 h-6" />
-                <h2 className="text-2xl font-black">
+              <div className="flex items-center gap-2 mb-1 sm:mb-2">
+                <CreditCard className="w-5 h-5 sm:w-6 sm:h-6" />
+                <h2 className="text-xl sm:text-2xl font-black">
                   Boleta #{boletaNumero}
                 </h2>
               </div>
-              <p className="text-white/90 text-sm">Completa tu compra</p>
+              <p className="text-white/90 text-xs sm:text-sm">Completa tu compra</p>
             </div>
             <button
               onClick={onClose}
@@ -102,16 +102,16 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
           </div>
         </div>
 
-        <div className="p-6 sm:p-8 bg-gradient-to-br from-gray-50 to-white">
+        <div className="p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-gray-50 to-white overflow-y-auto flex-1">
           {/* Info de precio */}
-          <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-4 sm:p-5 mb-6 border-2 border-purple-200">
+          <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-5 mb-4 sm:mb-6 border-2 border-purple-200">
             <div className="flex items-center justify-between">
-              <span className="text-gray-700 font-bold text-base sm:text-lg">Precio total</span>
-              <span className="text-2xl sm:text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">$20.000</span>
+              <span className="text-gray-700 font-bold text-sm sm:text-base lg:text-lg">Precio total</span>
+              <span className="text-xl sm:text-2xl lg:text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">$20.000</span>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 lg:space-y-5">
             {/* Campo Nombre */}
             <div>
               <label htmlFor="nombre" className="block text-gray-700 font-semibold text-sm mb-2">
@@ -125,7 +125,7 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
                 id="nombre"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
-                className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-800 text-sm sm:text-base placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-800 text-sm sm:text-base placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
                 placeholder="Tu nombre completo"
                 required
                 disabled={loading}
@@ -145,7 +145,7 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
                 id="telefono"
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
-                className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-800 text-sm sm:text-base placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-gray-200 rounded-xl text-gray-800 text-sm sm:text-base placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all outline-none"
                 placeholder="3001234567"
                 required
                 disabled={loading}
@@ -172,8 +172,8 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
                 <label
                   htmlFor="comprobante"
                   className={`
-                    w-full px-4 py-4 bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-dashed border-purple-300 rounded-xl
-                    flex items-center justify-center gap-3 cursor-pointer
+                    w-full px-3 sm:px-4 py-3 sm:py-4 bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-dashed border-purple-300 rounded-xl
+                    flex items-center justify-center gap-2 sm:gap-3 cursor-pointer
                     hover:from-purple-100 hover:to-pink-100 hover:border-purple-500 transition-all
                     ${loading ? 'opacity-50 cursor-not-allowed' : ''}
                   `}
@@ -208,25 +208,25 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
             </div>
 
             {/* Info adicional */}
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl">
-              <p className="text-xs text-blue-800">
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-3 sm:p-4 rounded-r-xl">
+              <p className="text-xs sm:text-xs text-blue-800 leading-relaxed">
                 <strong>Importante:</strong> Si adjuntas el comprobante, tu boleta se marcará como <strong className="text-green-600">comprada</strong>. Sin comprobante quedará <strong className="text-yellow-600">reservada</strong> temporalmente.
               </p>
             </div>
 
             {/* Botones */}
-            <div className="flex gap-3 pt-2">
+            <div className="flex gap-2 sm:gap-3 pt-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl text-sm sm:text-base font-semibold transition-all"
+                className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl text-sm sm:text-base font-semibold transition-all"
                 disabled={loading}
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 hover:from-purple-700 hover:via-pink-600 hover:to-red-600 text-white rounded-xl text-sm sm:text-base font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 hover:from-purple-700 hover:via-pink-600 hover:to-red-600 text-white rounded-xl text-sm sm:text-base font-bold transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105"
                 disabled={loading}
               >
                 {loading ? (
@@ -237,7 +237,7 @@ export const ModalPago = ({ boletaNumero, onClose, onConfirmar }: ModalPagoProps
                 ) : (
                   <>
                     <CreditCard className="w-4 h-4" />
-                    Confirmar Compra
+                    Confirmar
                   </>
                 )}
               </button>

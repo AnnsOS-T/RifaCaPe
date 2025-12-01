@@ -2,7 +2,7 @@ import { Boleta as BoletaType, BoletaEstado } from '../types';
 
 interface BoletaItemProps {
   boleta: BoletaType;
-  onSelect: (numero: number) => void;
+  onSelect: (numero: string) => void;
 }
 
 export const BoletaItem = ({ boleta, onSelect }: BoletaItemProps) => {
@@ -31,7 +31,7 @@ export const BoletaItem = ({ boleta, onSelect }: BoletaItemProps) => {
       disabled={boleta.estado !== BoletaEstado.DISPONIBLE}
       className={`
         relative flex items-center justify-center
-        aspect-square rounded transition-all duration-200
+        aspect-square w-full sm:w-11 sm:h-11 rounded transition-all duration-200
         ${getEstadoClasses()}
         ${boleta.estado === BoletaEstado.DISPONIBLE 
           ? 'transform hover:scale-105 active:scale-95' 
@@ -40,7 +40,7 @@ export const BoletaItem = ({ boleta, onSelect }: BoletaItemProps) => {
         focus:outline-none focus:ring-2 focus:ring-teal-400
       `}
     >
-      <span className="text-[9px] sm:text-[10px] font-bold tabular-nums">
+      <span className="text-xs sm:text-base font-bold tabular-nums">
         {boleta.numero}
       </span>
     </button>

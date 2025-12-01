@@ -18,11 +18,11 @@ async function seedBoletas() {
       await Boleta.deleteMany({});
     }
     
-    // Crear 100 boletas
+    // Crear 100 boletas (00 a 99)
     const boletas = [];
-    for (let i = 1; i <= 100; i++) {
+    for (let i = 0; i <= 99; i++) {
       boletas.push({
-        numero: i,
+        numero: String(i).padStart(2, '0'),
         estado: BoletaEstado.DISPONIBLE
       });
     }

@@ -6,11 +6,10 @@ export interface IBoletaDocument extends IBoleta, Document {}
 const boletaSchema = new Schema<IBoletaDocument>(
   {
     numero: {
-      type: Number,
+      type: String,
       required: true,
       unique: true,
-      min: 1,
-      max: 100
+      match: /^\d{2}$/
     },
     estado: {
       type: String,

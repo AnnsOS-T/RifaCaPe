@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HomePage } from './pages/HomePage';
 import { AdminPage } from './pages/AdminPage';
+import { ResultadosPage } from './pages/ResultadosPage';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(
@@ -11,6 +12,7 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/admin/:secretKey" element={<AdminPage />} />
+        <Route path="/resultados" element={<ResultadosPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
