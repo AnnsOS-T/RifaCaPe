@@ -189,6 +189,7 @@ export const HomePage = () => {
           <div className="bg-black/40 backdrop-blur-sm px-3 sm:px-6 py-3 sm:py-4 border-t border-gray-700/50">
             <div className="flex justify-between items-center text-xs sm:text-xs mb-2 sm:mb-3">
               <div className="text-left">
+                <p className="text-white font-bold text-xs sm:text-sm">Valor: $20.000</p>
                 <p className="text-gray-400 mb-0.5 text-[10px] sm:text-xs">Transferencias al:</p>
                 <p className="text-white font-bold text-xs sm:text-sm">3105572015</p>
                 <p className="text-gray-300 text-[9px] sm:text-[10px]">Responsable Dilan Acuña</p>
