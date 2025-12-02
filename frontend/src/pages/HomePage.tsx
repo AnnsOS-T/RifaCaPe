@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Loader2, Info, X, Sparkles, Calendar } from 'lucide-react';
+import { Loader2, Info, X, Sparkles, Calendar, Trophy } from 'lucide-react';
 import { Boleta } from '../types';
 import { boletaService } from '../services/api';
 import { BoletaItem } from '../components/BoletaItem';
@@ -104,8 +104,9 @@ export const HomePage = () => {
             </h1>
             
             <div className="bg-white rounded-3xl px-8 py-4 inline-block shadow-2xl transform hover:scale-105 transition-transform">
-              <div className="flex items-center justify-center gap-3 mb-1">
-                <span className="text-gray-600 text-lg font-semibold">Premio Mayor</span>
+              <div  className="flex items-center justify-center gap-3 mb-1">
+                <Trophy className="text-yellow-600 text-lg font-semibold" />
+                <span className="text-gray-600 text-lg font-semibold">Premio Mayor</span>   
               </div>
               <div className="text-5xl sm:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 text-center">
                 $1.000.000
