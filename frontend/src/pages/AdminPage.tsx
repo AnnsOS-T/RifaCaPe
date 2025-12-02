@@ -27,7 +27,7 @@ export const AdminPage = () => {
   const [procesando, setProcesando] = useState<number | null>(null);
   const [comprobanteModal, setComprobanteModal] = useState<string | null>(null);
   const [mostrarModalFinalizar, setMostrarModalFinalizar] = useState(false);
-  const [numeroGanador, setNumeroGanador] = useState('');
+  const [numeroLoteriaInput, setNumeroLoteriaInput] = useState('');
   const [errorFinalizar, setErrorFinalizar] = useState<string | null>(null);
   const [finalizando, setFinalizando] = useState(false);
 
@@ -129,15 +129,20 @@ export const AdminPage = () => {
   const handleFinalizarSorteo = async () => {
     if (!secretKey) return;
     
-    // Validar formato 00-99
-    if (!/^\d{2}$/.test(numeroGanador)) {
-      setErrorFinalizar('El número debe tener formato 00-99');
+    const numeroCompleto = numeroLoteriaInput.trim();
+    
+    // Validar formato 0000-9999 (4 dígitos)
+    if (!/^\d{4}$/.test(numeroCompleto)) {
+      setErrorFinalizar('Por favor ingresa un número válido de 4 dígitos (ejemplo: 3842)');
       return;
     }
 
+    // Extraer los 2 últimos dígitos
+    const dosUltimosDigitos = numeroCompleto.slice(-2);
+
     setFinalizando(true);
     try {
-      await boletaService.finalizarSorteo(secretKey, numeroGanador);
+      await boletaService.finalizarSorteo(secretKey, dosUltimosDigitos, numeroCompleto);
       // Redirigir a la página principal que ahora mostrará los resultados
       window.location.href = '/';
     } catch (err: any) {
@@ -467,26 +472,33 @@ export const AdminPage = () => {
                 <div className="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4">
                   <p className="text-sm text-gray-700 leading-relaxed">
                     Al confirmar, la página principal mostrará únicamente los resultados del sorteo. 
-                    Los usuarios no podrán comprar más boletas.
+                    Los usuarios no podrán comprar más boletas. Ingresa el número completo de 4 dígitos de la Lotería de Boyacá. 
+                    Se tomará como ganador los 2 últimos dígitos.
                   </p>
                 </div>
 
                 <div>
                   <label className="block text-gray-900 font-bold mb-2">
-                    Número Ganador (00-99)
+                    Número de Lotería de Boyacá (4 dígitos)
                   </label>
                   <input
                     type="text"
-                    maxLength={2}
-                    value={numeroGanador}
+                    maxLength={4}
+                    value={numeroLoteriaInput}
                     onChange={(e) => {
                       const val = e.target.value.replace(/\D/g, ''); // Solo dígitos
-                      setNumeroGanador(val);
+                      setNumeroLoteriaInput(val);
                       setErrorFinalizar(null);
                     }}
                     className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none text-center text-2xl font-bold"
+                    placeholder="0000"
                     disabled={finalizando}
                   />
+                  {numeroLoteriaInput.length === 4 && (
+                    <p className="text-green-600 text-sm mt-2 text-center font-semibold">
+                      Número ganador (2 últimos dígitos): <span className="font-bold text-lg">{numeroLoteriaInput.slice(-2)}</span>
+                    </p>
+                  )}
                 </div>
 
                 {errorFinalizar && (
@@ -508,7 +520,7 @@ export const AdminPage = () => {
                 </button>
                 <button
                   onClick={handleFinalizarSorteo}
-                  disabled={finalizando || !numeroGanador}
+                  disabled={finalizando || !numeroLoteriaInput || numeroLoteriaInput.length !== 4}
                   className="flex-1 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-full px-6 py-3 font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {finalizando ? (

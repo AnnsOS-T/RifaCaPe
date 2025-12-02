@@ -1,7 +1,5 @@
-    import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, AlertCircle, CheckCircle, Clock, Calendar, User, Trophy, Sparkles } from 'lucide-react';
-import axios from 'axios';
+import { CheckCircle, Clock, Calendar, User, Trophy, Sparkles, Home } from 'lucide-react';
 
 interface BoletaResultado {
   numero: string;
@@ -10,55 +8,28 @@ interface BoletaResultado {
   fechaCompra: string;
 }
 
-interface ResultadosData {
-  resultados: BoletaResultado[];
-  sorteoFinalizado: boolean;
-  numeroGanador?: string;
-  numeroLoteriaCompleto?: string;
-  fechaFinalizacion?: string;
-}
-
-export const ResultadosPage = () => {
+export const EjemploResultadosPage = () => {
   const navigate = useNavigate();
-  const [boletas, setBoletas] = useState<BoletaResultado[]>([]);
-  const [numeroGanador, setNumeroGanador] = useState<string | null>(null);
-  const [numeroLoteriaCompleto, setNumeroLoteriaCompleto] = useState<string | null>(null);
-  const [boletaGanadora, setBoletaGanadora] = useState<BoletaResultado | null>(null);
-  const [fechaFinalizacion, setFechaFinalizacion] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    cargarResultados();
-  }, []);
-
-  const cargarResultados = async () => {
-    try {
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-      const response = await axios.get(`${backendUrl}/boletas/resultados`);
-      
-      if (response.data.success) {
-        const data: ResultadosData = response.data.data;
-        setBoletas(data.resultados);
-        setNumeroGanador(data.numeroGanador || null);
-        setNumeroLoteriaCompleto(data.numeroLoteriaCompleto || null);
-        setFechaFinalizacion(data.fechaFinalizacion || null);
-        
-        // Buscar la boleta ganadora
-        if (data.numeroGanador) {
-          const ganadora = data.resultados.find(b => b.numero === data.numeroGanador);
-          setBoletaGanadora(ganadora || null);
-        }
-        
-        setError(null);
-      }
-    } catch (err: any) {
-      setError('Error al cargar los resultados. Intenta nuevamente.');
-      console.error('Error:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Datos artificiales de ejemplo
+  const numeroGanador = "42";
+  const numeroLoteriaCompleto = "3842";
+  const fechaFinalizacion = "2025-12-27T22:00:00";
+  
+  const boletas: BoletaResultado[] = [
+    { numero: "01", estado: "pagada", nombreCensurado: "Ra*** Pe***", fechaCompra: "2025-12-10T10:15:00" },
+    { numero: "07", estado: "pagada", nombreCensurado: "Ju*** He***", fechaCompra: "2025-12-11T16:42:00" },
+    { numero: "12", estado: "reservada", nombreCensurado: "Fe*** Mo***", fechaCompra: "2025-12-14T12:00:00" },
+    { numero: "15", estado: "pagada", nombreCensurado: "An*** Go***", fechaCompra: "2025-12-12T09:30:00" },
+    { numero: "23", estado: "pagada", nombreCensurado: "Lu*** Sá***", fechaCompra: "2025-12-13T11:20:00" },
+    { numero: "34", estado: "reservada", nombreCensurado: "Cl*** Ri***", fechaCompra: "2025-12-15T15:30:00" },
+    { numero: "42", estado: "pagada", nombreCensurado: "Ma*** Ro***", fechaCompra: "2025-12-15T14:23:00" },
+    { numero: "58", estado: "pagada", nombreCensurado: "Jo*** Me***", fechaCompra: "2025-12-16T08:45:00" },
+    { numero: "67", estado: "pagada", nombreCensurado: "So*** Vá***", fechaCompra: "2025-12-17T13:15:00" },
+    { numero: "89", estado: "pagada", nombreCensurado: "Pa*** Ca***", fechaCompra: "2025-12-18T17:00:00" }
+  ];
+  
+  const boletaGanadora = boletas.find(b => b.numero === numeroGanador) || null;
 
   const formatearFecha = (fecha: string) => {
     return new Date(fecha).toLocaleString('es-CO', {
@@ -87,35 +58,6 @@ export const ResultadosPage = () => {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-pink-500 to-red-500">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 text-white animate-spin mx-auto mb-4" />
-          <p className="text-white font-medium">Cargando resultados...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 p-4">
-        <div className="max-w-md w-full bg-white rounded-3xl p-8 text-center shadow-2xl">
-          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-black text-gray-800 mb-2">Error</h2>
-          <p className="text-gray-600 mb-6">{error}</p>
-          <button
-            onClick={() => navigate('/')}
-            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full font-bold transition-all hover:scale-105 shadow-lg"
-          >
-            Volver al inicio
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 relative overflow-hidden">
       {/* Elementos decorativos de fondo */}
@@ -127,11 +69,22 @@ export const ResultadosPage = () => {
 
       <div className="relative z-10 py-8 px-4">
         <div className="max-w-6xl mx-auto">
+          {/* Botón Volver */}
+          <div className="mb-6 text-center">
+            <button
+              onClick={() => navigate('/')}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-transparent backdrop-blur-md hover:bg-white/30 text-white rounded-full font-semibold transition-all hover:scale-105"
+            >
+              <Home className="w-5 h-5" />
+              Volver al Inicio
+            </button>
+          </div>
+
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full mb-4">
+            <div className="inline-flex items-center gap-2 bg-transparent backdrop-blur-md px-4 py-2 rounded-full mb-4">
               <Trophy className="w-4 h-4 text-yellow-300" />
-              <span className="text-white text-sm font-semibold">Resultados Oficiales</span>
+              <span className="text-white text-sm font-semibold">Resultados de Ejemplo</span>
             </div>
             <h1 className="text-4xl sm:text-5xl font-black text-white mb-2 drop-shadow-2xl">
               {numeroGanador ? 'Resultados del Sorteo' : 'Boletas Vendidas'}

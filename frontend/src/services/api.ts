@@ -77,10 +77,17 @@ export const boletaService = {
   },
 
   // Admin: Finalizar sorteo
-  finalizarSorteo: async (secretKey: string, numeroGanador: string) => {
+  finalizarSorteo: async (secretKey: string, numeroGanador: string, numeroLoteriaCompleto?: string) => {
     const response = await api.post(`/boletas/admin/${secretKey}/finalizar-sorteo`, {
-      numeroGanador
+      numeroGanador,
+      numeroLoteriaCompleto
     });
+    return response.data;
+  },
+
+  // Obtener resultados del sorteo
+  obtenerResultados: async () => {
+    const response = await api.get('/boletas/resultados');
     return response.data;
   },
 };

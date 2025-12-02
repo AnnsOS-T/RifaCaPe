@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, Info, X, Sparkles, Calendar, Trophy, Lock } from 'lucide-react';
+import { Loader2, Info, X, Sparkles, Calendar, Trophy, Lock, LampCeilingIcon } from 'lucide-react';
 import { Boleta } from '../types';
 import { boletaService } from '../services/api';
 import { BoletaItem } from '../components/BoletaItem';
@@ -195,6 +195,34 @@ export const HomePage = () => {
                         Con comprobante: <span className="text-green-600 font-semibold">Comprada</span> | 
                         Sin comprobante: <span className="text-yellow-600 font-semibold">Reservada</span>
                       </p>
+                      <p className="text-xs sm:text-sm mt-2">
+                        El responsable validará el pago y actualizará el estado.
+                      </p>
+                      <p className="text-xs sm:text-sm">
+                        Solo las boletas marcadas como pagadas participarán en el sorteo.
+                      </p>
+                      <p className="text-[10px] sm:text-xs text-yellow-600 font-semibold">
+                        <LampCeilingIcon className="w-3 h-3 inline-block text-yellow-500 mb-0.5" />
+                        Se hará un recordatorio a los numeros con boletas reservadas una semana antes del sorteo para completar el proceso de pago.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3 sm:gap-4 items-start">
+                    <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                      5
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-bold text-gray-800 mb-1 text-sm sm:text-base">Resultados del sorteo</p>
+                      <p className="text-xs sm:text-sm mb-2">
+                        El 27 de diciembre, esta página se actualizará automáticamente mostrando el número ganador y los datos de todas las boletas vendidas para total transparencia.
+                      </p>
+                      <button
+                        onClick={() => navigate('/ejemplo-resultados')}
+                        className="inline-block bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+                      >
+                        Ver ejemplo de resultados →
+                      </button>
                     </div>
                   </div>
                 </div>
